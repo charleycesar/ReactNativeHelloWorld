@@ -1,20 +1,21 @@
-import React, { Component } from 'react';
+import React, { Component, Platform } from 'react';
 import {
   StyleSheet,
   Image,
   Text,
-  View
+  View,
+  Alert
 } from 'react-native';
-import { Toolbar, Avatar, Divider } from 'react-native-material-ui';
+import { Toolbar, Avatar, ScrollView, Subheader, ListItem, ToastAndroid } from 'react-native-material-ui';
 
 export default class HomeScene extends Component {
     constructor(props) {
       super(props);
       this.state = { items: [
-        { name: "Matthew", link: "https://bible.com/1/mat.1" },
-        { name: "Mark", link: "https://bible.com/1/mrk.1" },
-        { name: "Luke", link: "https://bible.com/1/luk.1" },
-        { name: "John", link: "https://bible.com/1/jhn.1" }
+        { title: "Charley Oliveira", regard: "Ganhe 100 pontos", local: "Grajau", latitude: 1, longitude:2 },
+        { title: "Anthony", regard: "Ganhe 70 pontos", local: "Pavuna", latitude: 1, longitude:2 },
+        { title: "Bruno Lima", regard: "Ganhe 65 pontos", local: "Botafogo", latitude: 1, longitude:2 },
+        { title: "Mission Teste", regard: "Ganhe 89 pontos", local: "Online", latitude: 1, longitude:2 }
       ] };
     }
     componentDidMount() {
@@ -37,9 +38,25 @@ export default class HomeScene extends Component {
     render () {
         var listItems = this.state.items.map(function(item) {
           return (
-            <li key={item.name}>
-              <a href={item.link}>{item.name}</a>
-            </li>
+            <ListItem
+                divider
+                leftElement="room"
+                rightElement="info"
+                centerElement={{
+                    primaryText: item.title,
+                    secondaryText: item.local,
+                    tertiaryText: item.regard
+                }}
+                onPress={() => Alert.alert(
+                  item.title,
+                  item.local,
+                  [
+                    {text: 'Cancelar', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
+                    {text: 'OK', onPress: () => console.log('OK Pressed')},
+                  ],
+                  { cancelable: false }
+                )}
+            />
           );
         });
         return (
@@ -47,18 +64,10 @@ export default class HomeScene extends Component {
               <Toolbar
                 leftElement="menu"
                 centerElement="Missoes"
-                searchable={{
-                  autoFocus: true,
-                  placeholder: 'Search',
-                }}
               />
-
-              <Avatar icon="room" iconColor="blue" />
-              
-              <Divider />
+              {listItems}
             </View>
-
-   	  	)
+        )
    	}
 }
 
